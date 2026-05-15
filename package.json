@@ -14,16 +14,27 @@
       "types": "./dist/adapter.d.ts"
     }
   },
-  "files": ["dist"],
-  "engines": { "node": ">=22.12.0" },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "license": "Apache-2.0",
-  "repository": { "type": "git", "url": "git+https://github.com/zitadel/remix-auth.git" },
-  "author": { "name": "Mridang Agarwalla", "email": "mridang@zitadel.com", "url": "https://github.com/zitadel" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zitadel/remix-auth.git"
+  },
+  "author": {
+    "name": "Mridang Agarwalla",
+    "email": "mridang@zitadel.com",
+    "url": "https://github.com/zitadel"
+  },
   "scripts": {
     "prepack": "tsc",
     "prepare": "npm run build",
     "build": "tsup",
-    "test": "jest --verbose --config=jest.config.mjs --runInBand",
+    "test": "jest --verbose --config=jest.config.mjs --runInBand --passWithNoTests",
     "test:watch": "npm run test -- --watch",
     "test:debug": "jest --verbose --config=jest.config.mjs --runInBand --detectOpenHandles",
     "format": "prettier --write .",
@@ -35,7 +46,7 @@
   },
   "peerDependencies": {
     "@auth/core": ">=0.40.0",
-    "remix": ">=3.0.0-beta.0"
+    "react-router": ">=7.0.0"
   },
   "devDependencies": {
     "@auth/core": "^0.40.0",
@@ -59,11 +70,22 @@
     "ts-jest": "29.4.0",
     "tsup": "^8.5.0",
     "typedoc": "^0.28.7",
+    "tailwindcss": "^4.0.0",
     "typescript": "^5.9.3"
   },
-  "keywords": ["remix", "remix-auth", "auth", "authentication", "oauth", "authjs", "@auth/core"],
+  "keywords": [
+    "remix",
+    "remix-auth",
+    "auth",
+    "authentication",
+    "oauth",
+    "authjs",
+    "@auth/core"
+  ],
   "private": false,
   "homepage": "https://github.com/zitadel/remix-auth",
   "bugs": "https://github.com/zitadel/remix-auth/issues",
-  "publishConfig": { "access": "public" }
+  "publishConfig": {
+    "access": "public"
+  }
 }
