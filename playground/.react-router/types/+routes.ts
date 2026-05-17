@@ -20,6 +20,9 @@ type Pages = {
   "/api/auth/logout/callback": {
     params: {};
   };
+  "/api/unprotected": {
+    params: {};
+  };
   "/logout/success": {
     params: {};
   };
@@ -27,6 +30,9 @@ type Pages = {
     params: {};
   };
   "/logout/error": {
+    params: {};
+  };
+  "/api/secured": {
     params: {};
   };
   "/api/auth/*": {
@@ -53,7 +59,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/api/auth/logout" | "/api/auth/logout/callback" | "/logout/success" | "/api/userinfo" | "/logout/error" | "/api/auth/*" | "/auth/error" | "/auth/login" | "/profile" | "/*";
+    page: "/" | "/api/auth/logout" | "/api/auth/logout/callback" | "/api/unprotected" | "/logout/success" | "/api/userinfo" | "/logout/error" | "/api/secured" | "/api/auth/*" | "/auth/error" | "/auth/login" | "/profile" | "/*";
   };
   "routes/api.auth.logout.ts": {
     id: "routes/api.auth.logout";
@@ -62,6 +68,10 @@ type RouteFiles = {
   "routes/api.auth.logout.callback.ts": {
     id: "routes/api.auth.logout.callback";
     page: "/api/auth/logout/callback";
+  };
+  "routes/api.unprotected.ts": {
+    id: "routes/api.unprotected";
+    page: "/api/unprotected";
   };
   "routes/logout.success.tsx": {
     id: "routes/logout.success";
@@ -74,6 +84,10 @@ type RouteFiles = {
   "routes/logout.error.tsx": {
     id: "routes/logout.error";
     page: "/logout/error";
+  };
+  "routes/api.secured.ts": {
+    id: "routes/api.secured";
+    page: "/api/secured";
   };
   "routes/api.auth.$.ts": {
     id: "routes/api.auth.$";
@@ -105,9 +119,11 @@ type RouteModules = {
   "root": typeof import("./app/root.tsx");
   "routes/api.auth.logout": typeof import("./app/routes/api.auth.logout.ts");
   "routes/api.auth.logout.callback": typeof import("./app/routes/api.auth.logout.callback.ts");
+  "routes/api.unprotected": typeof import("./app/routes/api.unprotected.ts");
   "routes/logout.success": typeof import("./app/routes/logout.success.tsx");
   "routes/api.userinfo": typeof import("./app/routes/api.userinfo.tsx");
   "routes/logout.error": typeof import("./app/routes/logout.error.tsx");
+  "routes/api.secured": typeof import("./app/routes/api.secured.ts");
   "routes/api.auth.$": typeof import("./app/routes/api.auth.$.ts");
   "routes/auth.error": typeof import("./app/routes/auth.error.tsx");
   "routes/auth.login": typeof import("./app/routes/auth.login.tsx");
