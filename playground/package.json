@@ -1,0 +1,46 @@
+{
+  "name": "playground-remix-auth",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "react-router build",
+    "dev": "react-router dev --port ${PORT:-3000}",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "preview": "node ./build/server/index.js",
+    "start": "react-router dev"
+  },
+  "dependencies": {
+    "@auth/core": "^0.41.0",
+    "@react-router/fs-routes": "^7.15.1",
+    "@react-router/node": "^7.15.1",
+    "@zitadel/remix-auth": "file:../",
+    "isbot": "^4.4.0",
+    "react": "^19",
+    "react-dom": "^19",
+    "react-router": "^7.15.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.38.0",
+    "@react-router/dev": "^7.15.1",
+    "@tailwindcss/vite": "^4.1.11",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.3.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.14",
+    "tailwindcss": "^4.0.0",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.20.0",
+    "vite": "^7.3.2"
+  }
+}

@@ -62,8 +62,20 @@ export function RemixAuth(config: RemixAuthConfig): {
     GET: (args: RemixHandlerArgs) => Promise<Response>;
     POST: (args: RemixHandlerArgs) => Promise<Response>;
   };
+  /** @deprecated Use `handlers.GET` instead */
+  GET: (args: RemixHandlerArgs) => Promise<Response>;
+  /** @deprecated Use `handlers.POST` instead */
+  POST: (args: RemixHandlerArgs) => Promise<Response>;
   getSession: (request: Request) => Promise<Session | null>;
+  /** @deprecated Use `getSession` instead */
+  auth: (request: Request) => Promise<Session | null>;
+  signIn: (
+    provider?: string,
+    options?: { redirectTo?: string },
+  ) => Promise<Response>;
+  signOut: (options?: { redirectTo?: string }) => Promise<Response>;
 } {
+  config.basePath ??= '/api/auth';
   setEnvDefaults(process.env, config);
 
   async function handler(args: RemixHandlerArgs): Promise<Response> {
@@ -93,8 +105,79 @@ export function RemixAuth(config: RemixAuthConfig): {
     throw new Error((data as { message?: string }).message ?? 'Session error');
   }
 
+  async function signIn(
+    provider?: string,
+    options: { redirectTo?: string } = {},
+  ): Promise<Response> {
+    const basePath = (config.basePath ?? '/api/auth').replace(/\/$/, '');
+    const params = new URLSearchParams();
+    if (options.redirectTo) params.set('callbackUrl', options.redirectTo);
+    const paramStr = params.toString();
+    const url = provider
+      ? `${basePath}/signin/${provider}${paramStr ? `?${paramStr}` : ''}`
+      : `${basePath}/signin${paramStr ? `?${paramStr}` : ''}`;
+    return Response.redirect(url, 302);
+  }
+
+  async function signOut(
+    options: { redirectTo?: string } = {},
+  ): Promise<Response> {
+    const basePath = (config.basePath ?? '/api/auth').replace(/\/$/, '');
+    const params = new URLSearchParams();
+    if (options.redirectTo) params.set('callbackUrl', options.redirectTo);
+    const paramStr = params.toString();
+    const url = `${basePath}/signout${paramStr ? `?${paramStr}` : ''}`;
+    return Response.redirect(url, 302);
+  }
+
   return {
     handlers: { GET: handler, POST: handler },
+    GET: handler,
+    POST: handler,
     getSession,
+    auth: getSession,
+    signIn,
+    signOut,
   };
+}
+
+/**
+ * Retrieves the current session on the server side.
+ *
+ * @param req - The current Request object
+ * @param config - Auth.js configuration
+ * @returns The session object or null
+ *
+ * @example
+ * ```ts
+ * import { getSession } from '@zitadel/remix-auth';
+ * import { authConfig } from '~/auth.server';
+ *
+ * const session = await getSession(request, authConfig);
+ * ```
+ */
+export async function getSession(
+  req: Request,
+  config: RemixAuthConfig,
+): Promise<Session | null> {
+  setEnvDefaults(process.env, config);
+
+  const url = createActionURL(
+    'session',
+    new URL(req.url).protocol.slice(0, -1) as 'http' | 'https',
+    new Headers(req.headers),
+    process.env,
+    config,
+  );
+
+  const response = await Auth(
+    new Request(url, { headers: { cookie: req.headers.get('cookie') ?? '' } }),
+    config,
+  );
+
+  const { status } = response;
+  const data = (await response.json()) as Record<string, unknown> | null;
+  if (!data || !Object.keys(data).length) return null;
+  if (status === 200) return data as unknown as Session;
+  throw new Error((data as { message?: string }).message ?? 'Session error');
 }
