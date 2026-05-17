@@ -14,6 +14,9 @@ type Pages = {
   "/": {
     params: {};
   };
+  "/api/protected/middleware": {
+    params: {};
+  };
   "/api/auth/logout": {
     params: {};
   };
@@ -59,7 +62,11 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/api/auth/logout" | "/api/auth/logout/callback" | "/api/unprotected" | "/logout/success" | "/api/userinfo" | "/logout/error" | "/api/secured" | "/api/auth/*" | "/auth/error" | "/auth/login" | "/profile" | "/*";
+    page: "/" | "/api/protected/middleware" | "/api/auth/logout" | "/api/auth/logout/callback" | "/api/unprotected" | "/logout/success" | "/api/userinfo" | "/logout/error" | "/api/secured" | "/api/auth/*" | "/auth/error" | "/auth/login" | "/profile" | "/*";
+  };
+  "routes/api.protected.middleware.ts": {
+    id: "routes/api.protected.middleware";
+    page: "/api/protected/middleware";
   };
   "routes/api.auth.logout.ts": {
     id: "routes/api.auth.logout";
@@ -117,6 +124,7 @@ type RouteFiles = {
 
 type RouteModules = {
   "root": typeof import("./app/root.tsx");
+  "routes/api.protected.middleware": typeof import("./app/routes/api.protected.middleware.ts");
   "routes/api.auth.logout": typeof import("./app/routes/api.auth.logout.ts");
   "routes/api.auth.logout.callback": typeof import("./app/routes/api.auth.logout.callback.ts");
   "routes/api.unprotected": typeof import("./app/routes/api.unprotected.ts");
