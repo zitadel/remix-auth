@@ -144,6 +144,9 @@ export function RemixAuth(config: RemixAuthConfig): {
 /**
  * Retrieves the current session on the server side.
  *
+ * Standalone two-argument form — use this when you don't have a factory
+ * instance but have a request and config available directly.
+ *
  * @param req - The current Request object
  * @param config - Auth.js configuration
  * @returns The session object or null
