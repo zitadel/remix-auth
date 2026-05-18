@@ -17,11 +17,15 @@ export type {
 
 /**
  * Auth.js configuration for Remix 3 applications.
+ *
+ * @public
  */
 export type RemixAuthConfig = Omit<AuthConfig, 'raw'>;
 
 /**
  * Remix 3 loader/action argument type.
+ *
+ * @public
  */
 export type RemixHandlerArgs = {
   request: Request;
@@ -56,6 +60,8 @@ export type RemixHandlerArgs = {
  * import { handlers } from '~/auth.server';
  * export const { GET, POST } = handlers;
  * ```
+ *
+ * @public
  */
 export function RemixAuth(config: RemixAuthConfig): {
   handlers: {
@@ -154,10 +160,12 @@ export function RemixAuth(config: RemixAuthConfig): {
  * @example
  * ```ts
  * import { getSession } from '@zitadel/remix-auth';
- * import { authConfig } from '~/auth.server';
+ * import { authOptions } from '~/auth.server';
  *
- * const session = await getSession(request, authConfig);
+ * const session = await getSession(request, authOptions);
  * ```
+ *
+ * @public
  */
 export async function getSession(
   req: Request,
