@@ -25,7 +25,7 @@ export default {
     '/node_modules/',
     '/frontend/',
     '/dist/',
-    '/test/browser/',
+    '/spec/',
     '/playground/',
   ],
   resetModules: false,
