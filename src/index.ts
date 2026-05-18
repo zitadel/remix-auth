@@ -33,17 +33,34 @@ export type RemixHandlerArgs = {
 };
 
 /**
+ * Either a static {@link RemixAuthConfig} object or a request-scoped factory
+ * `(args) => RemixAuthConfig`.
+ *
+ * The factory form defers config evaluation until request time, which keeps
+ * server-only imports out of any code path the bundler can reach from a
+ * client entry point. Useful when reading config from request-scoped env
+ * (Cloudflare Workers, Deno Deploy) rather than from `process.env`.
+ *
+ * @public
+ */
+export type RemixAuthConfigOrFactory =
+  | RemixAuthConfig
+  | ((args: RemixHandlerArgs) => RemixAuthConfig);
+
+/**
  * Creates a Remix Auth handler for Remix 3+ applications.
  *
- * Remix 3 uses the Fetch API natively, so no request/response conversion is
- * needed. This handler is a thin wrapper around Auth.js core.
+ * Accepts either a {@link RemixAuthConfig} object or a request-scoped
+ * factory `(args) => RemixAuthConfig`. The factory form defers config
+ * evaluation to request time, which keeps server-only imports off any
+ * client-reachable graph.
  *
- * @param config - Auth.js configuration
+ * @param rawConfig - Auth.js configuration object or factory function
  * @returns Object containing handlers and getSession utility
  *
  * @example
  * ```ts
- * // app/auth.server.ts
+ * // app/auth.server.ts — object form
  * import { RemixAuth } from '@zitadel/remix-auth';
  * import Zitadel from '@auth/core/providers/zitadel';
  *
@@ -56,6 +73,19 @@ export type RemixHandlerArgs = {
  *
  * @example
  * ```ts
+ * // app/auth.server.ts — factory form (request-scoped env)
+ * import { RemixAuth } from '@zitadel/remix-auth';
+ *
+ * export const { handlers, getSession } = RemixAuth(({ request }) => ({
+ *   providers: [Zitadel({
+ *     clientId: request.headers.get('x-zitadel-client-id') ?? '',
+ *   })],
+ *   secret: process.env.AUTH_SECRET,
+ * }));
+ * ```
+ *
+ * @example
+ * ```ts
  * // app/routes/api.auth.$.ts
  * import { handlers } from '~/auth.server';
  * export const { GET, POST } = handlers;
@@ -63,7 +93,7 @@ export type RemixHandlerArgs = {
  *
  * @public
  */
-export function RemixAuth(config: RemixAuthConfig): {
+export function RemixAuth(rawConfig: RemixAuthConfigOrFactory): {
   handlers: {
     GET: (args: RemixHandlerArgs) => Promise<Response>;
     POST: (args: RemixHandlerArgs) => Promise<Response>;
@@ -81,14 +111,20 @@ export function RemixAuth(config: RemixAuthConfig): {
   ) => Promise<Response>;
   signOut: (options?: { redirectTo?: string }) => Promise<Response>;
 } {
-  config.basePath ??= '/api/auth';
-  setEnvDefaults(process.env, config);
+  function resolveConfig(args: RemixHandlerArgs): RemixAuthConfig {
+    const c = typeof rawConfig === 'function' ? rawConfig(args) : rawConfig;
+    c.basePath ??= '/api/auth';
+    setEnvDefaults(process.env, c);
+    return c;
+  }
 
   async function handler(args: RemixHandlerArgs): Promise<Response> {
+    const config = resolveConfig(args);
     return Auth(args.request, config);
   }
 
   async function getSession(request: Request): Promise<Session | null> {
+    const config = resolveConfig({ request });
     const url = createActionURL(
       'session',
       new URL(request.url).protocol.slice(0, -1) as 'http' | 'https',
@@ -111,11 +147,19 @@ export function RemixAuth(config: RemixAuthConfig): {
     throw new Error((data as { message?: string }).message ?? 'Session error');
   }
 
+  // signIn / signOut have no request in scope; use the default basePath
+  // for the factory form. Users who need a per-request basePath should
+  // call Auth.js directly via handlers.GET/POST.
+  function defaultBasePath(): string {
+    if (typeof rawConfig === 'function') return '/api/auth';
+    return (rawConfig.basePath ?? '/api/auth').replace(/\/$/, '');
+  }
+
   async function signIn(
     provider?: string,
     options: { redirectTo?: string } = {},
   ): Promise<Response> {
-    const basePath = (config.basePath ?? '/api/auth').replace(/\/$/, '');
+    const basePath = defaultBasePath();
     const params = new URLSearchParams();
     if (options.redirectTo) params.set('callbackUrl', options.redirectTo);
     const paramStr = params.toString();
@@ -128,7 +172,7 @@ export function RemixAuth(config: RemixAuthConfig): {
   async function signOut(
     options: { redirectTo?: string } = {},
   ): Promise<Response> {
-    const basePath = (config.basePath ?? '/api/auth').replace(/\/$/, '');
+    const basePath = defaultBasePath();
     const params = new URLSearchParams();
     if (options.redirectTo) params.set('callbackUrl', options.redirectTo);
     const paramStr = params.toString();
