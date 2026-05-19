@@ -9,7 +9,7 @@ import { Footer } from '~/components/Footer';
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request);
   if (!session) {
-    throw redirect('/api/auth/signin');
+    throw redirect('/auth/login');
   }
   return { session };
 }
