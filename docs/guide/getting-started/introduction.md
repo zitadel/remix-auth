@@ -8,7 +8,7 @@ children:
 # Introduction
 
 `@zitadel/remix-auth` is an open source library that provides authentication
-for Remix 3 applications. It wraps [Auth.js](https://authjs.dev/) (`@auth/core`)
+for Remix 3 applications. It wraps auth (`@auth/core`)
 to bring OAuth, credentials, and magic-link authentication to Remix with a
 native developer experience.
 

@@ -1,11 +1,11 @@
 ---
 title: RemixAuth Factory
-group: Auth.js Provider
+group: OAuth Provider
 ---
 
 # RemixAuth Factory
 
-The `RemixAuth()` factory wires up the Auth.js handler and returns helpers
+The `RemixAuth()` factory wires up the auth handler and returns helpers
 bound to your config. Call it once in `app/auth.server.ts`:
 
 ```ts

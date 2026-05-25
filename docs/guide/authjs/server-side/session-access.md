@@ -1,6 +1,6 @@
 ---
 title: Session Access
-group: Auth.js Provider
+group: OAuth Provider
 category: Server Side
 ---
 
@@ -45,6 +45,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 ## Return shape
 
-`getSession()` returns the `Session` object Auth.js builds in the `session`
-callback, or `null` when no valid session exists. It throws when Auth.js
+`getSession()` returns the `Session` object OAuth builds in the `session`
+callback, or `null` when no valid session exists. It throws when OAuth
 returns a non-200 (e.g. on signature/decode failure).

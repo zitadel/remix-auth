@@ -1,11 +1,11 @@
 ---
 title: Custom Pages
-group: Auth.js Provider
+group: OAuth Provider
 ---
 
 # Custom auth pages
 
-Auth.js ships default sign-in and error pages. To use your own pages,
+OAuth ships default sign-in and error pages. To use your own pages,
 point `pages.signIn` and `pages.error` at your custom routes:
 
 ## Config
