@@ -42,7 +42,7 @@ and less burdensome authentication implementation.
 Install using NPM by using the following command:
 
 ```sh
-npm install @zitadel/remix-auth @auth/core react-router
+npm install @zitadel/remix-auth
 ```
 
 ## Usage
