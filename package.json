@@ -1,6 +1,6 @@
 {
   "name": "@zitadel/remix-auth",
-  "description": "A comprehensive Auth.js integration for Remix 3 applications with TypeScript support and session management",
+  "description": "A comprehensive authentication integration for Remix 3 applications with TypeScript support and session management",
   "version": "0.1.0",
   "type": "module",
   "main": "dist/index.js",
@@ -82,15 +82,20 @@
     "testcontainers": "^12.0.0"
   },
   "keywords": [
-    "remix",
-    "remix-auth",
     "auth",
     "authentication",
+    "authorization",
+    "authn",
+    "authz",
     "oauth",
+    "oidc",
     "authjs",
     "jwt",
-    "@auth",
-    "@auth/core"
+    "jwks",
+    "pkce",
+    "remix",
+    "react-router",
+    "react"
   ],
   "private": false,
   "homepage": "https://github.com/zitadel/remix-auth",
