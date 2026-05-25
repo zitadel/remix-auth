@@ -212,7 +212,6 @@ export function RemixAuth(rawConfig: RemixAuthConfigOrFactory): {
     return `${basePath}/signout${paramStr ? `?${paramStr}` : ''}`;
   }
 
-
   /**
    * Server-side helper to start the Auth.js sign-in flow.
    *
@@ -245,7 +244,6 @@ export function RemixAuth(rawConfig: RemixAuthConfigOrFactory): {
       headers: { Location: signInUrl(options) },
     });
   }
-
 
   /**
    * Server-side helper to start the Auth.js sign-out flow.
