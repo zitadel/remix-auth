@@ -1,3 +1,31 @@
+/**
+ * Auth.js integration for Remix (React Router v7).
+ *
+ * Provides authentication via Auth.js with support for OAuth providers,
+ * credentials, JWT sessions, and Remix loader/action conventions.
+ *
+ * @packageDocumentation
+ *
+ * @example Basic usage
+ * ```ts
+ * // app/auth.server.ts
+ * import { RemixAuth } from '@zitadel/remix-auth';
+ * import Zitadel from '@auth/core/providers/zitadel';
+ *
+ * export const { handlers, getSession, signIn, signOut } = RemixAuth({
+ *   providers: [Zitadel({ clientId: process.env.ZITADEL_CLIENT_ID! })],
+ * });
+ * ```
+ *
+ * @example Mounting the route handler
+ * ```ts
+ * // app/routes/api.auth.$.ts
+ * export { GET, POST } from '~/auth.server';
+ * ```
+ *
+ * @public
+ */
+
 import {
   Auth,
   type AuthConfig,
